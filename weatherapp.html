@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+     
+     *{
+         margin: 0;
+         padding: 0;
+     }
+     body{
+         background-image: url('weather.jpg');
+         background-size: cover;
+     }
+     .big{
+        display: grid;
+        grid-template-columns: 50% 50%;
+         height: 100vh;
+         background-image: linear-gradient(
+             to bottom,
+         rgba(0,0,0,0.3),
+         rgba(0,0,0,0.6)
+         );
+     }
+     header{
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         padding: 50px 15px;
+     }
+     header input{
+         padding: 10px 15px;
+         width: 100%;
+         max-width: 280px;
+         border: none;
+         background-color: rgba(255,255,255,0.4);
+         border-radius: 16px 0 16px 0;
+         color: #333;
+         font-size: 20px;
+         font-weight: 300;
+         border-bottom: 3px solid #df8e00;
+         transition: 0.2s ease-out;
+     }
+     header input:focus{
+         background-color: rgba(255,255,255,0.8);
+         border-radius: 0 16px 0 16px;
+     }
+     main{
+         
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         padding: 25px 25px 50px;
+         text-align: center;
+     }
+     .location .city{
+         font-size: 32px;
+         color: #fff;
+         font-weight: 500;
+         margin-bottom: 5px;
+     }
+      .date{
+          margin-top: 5px;
+        font-size: 20px;
+         color: #fff;
+     }
+     .temp .gradus{
+         font-size: 100px;
+         font-weight: 900;
+         margin: 30px 0;
+         color: #fff;
+         text-shadow: 2px 10px rgba(0,0,0,0.6);
+     }
+     .gradus span{
+         font-weight: 500;
+     }
+     .overallw{
+         color: #fff;
+         font-style: italic;
+         font-size: 32px;
+         font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0px 3px rgba(0,0,0,0.6);
+     }
+     .lowhigh{
+         color: #fff;
+         font-size: 24px;
+         font-weight: 500;
+         text-shadow: 0px 4px rgba(0,0,0,0.4);
+     }
+     @media(max-width:900px){
+     .big{
+        grid-template-columns: 100%;
+
+     }
+     }
+    </style>
+</head>
+<body>
+<div class="big">
+
+
+    <main>    
+<div class="location">
+    <div class="city">
+        Egypt,US
+    </div>
+<div class="date">Wednesday 9 June  2021</div>
+</div>
+
+<div class="temp">
+<div class="gradus">21<span class="celcia">°C</span></div>
+<div class="overallw">Fog</div>
+<div class="lowhigh">19<span class="celcia">°C</span> / 23<span class="celcia">°C</span></div>
+</div>
+
+</main>
+
+<header>
+    <input type="text" class="searchbox" placeholder="Search...">
+</header>
+
+</div>
+
+    <script>
+        const api={
+            key:'c11407c2db6c90d3f92fe8aa0c451a17',
+            baseurl:'https://api.openweathermap.org/data/2.5/',
+        };
+        var searchbox=document.querySelector('.searchbox');
+        searchbox.addEventListener('keypress',function(event){
+if(event.keyCode==13){
+    getresults(searchbox.value);
+}
+        });
+
+
+        function getresults(city){
+         fetch(`${api.baseurl}weather?q=${city}&units=metric&APPID=${api.key}`)
+         .then((weather)=>{
+             return weather.json();
+            })
+            .then(showresults);
+        }
+       
+
+
+            function showresults(weather){
+               console.log(weather);
+               var city = document.querySelector('.city');
+               var  gradus=document.querySelector('.gradus');
+               var overallw=document.querySelector('.overallw');
+               var lowhigh=document.querySelector('.lowhigh');
+               lowhigh.innerHTML=`${Math.floor(weather.main.temp_min)}°C /${Math.ceil(weather.main.temp_max)}°C`;
+               overallw.innerHTML=`${weather.weather[0].main}`;
+               gradus.innerHTML=`${Math.floor(weather.main.temp)}<span>°C</span>`
+               city.innerText=`${weather.name},${weather.sys.country}`;
+               var sana =new Date();
+         var oylar =['January','February','March','April','May','June','July','August','September','October','November','December']
+          var kunlar =['Sunday','Monday','Tuesday','Thirsday','Wednesday','Friday','Saturday']
+       var yil=sana.getFullYear();
+        var oy=sana.getMonth();
+       var kun=sana.getDate();
+       var haftakuni=sana.getDay();
+       var date=document.querySelector('.date');
+       date.innerHTML=kunlar[haftakuni]+' '+kun+' '+oylar[oy]+' '+yil;
+ 
+
+            }
+    </script>
+</body>
+</html>
